@@ -1,6 +1,5 @@
 # 💰 Small Business Discount Calculator
-
-![Calculator Preview](preview.png) *[Add screenshot later]*
+![Calculator Preview](preview.png)
 
 **A simple tool for shop owners to calculate & display discounts professionally**  
 ✔ No more manual percentage calculations  
