@@ -7,7 +7,7 @@
 ✔ Supports rounded pricing (e.g., 665 → 600)  
 ✔ Multiple items discount calculation  
 
-👉 [Live Demo](https://your-username.github.io/discount-calculator/)
+👉 [Live Demo]( https://shayan0786.github.io/BargainPercent-Tool/)
 
 ## 🛍️ Who Should Use This?
 
