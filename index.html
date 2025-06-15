@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Discount Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 70px !important; /* Adjust based on footer height */
+        }
+        
+        .container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 500px;
+            z-index: 2;
+            margin-bottom: 70px; /* Prevent content hiding behind footer */
+        }
+        
+        .card {
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 
+                        0 10px 10px rgba(0, 0, 0, 0.04);
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 28px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f8f9fa;
+        }
+        
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+            background-color: white;
+        }
+        
+        .currency {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary);
+            transition: all 0.5s;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .result-container.show {
+            opacity: 1;
+            height: auto;
+            padding: 20px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .result-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .discount-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .badge-success {
+            background-color: rgba(0, 184, 148, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background-color: rgba(253, 203, 110, 0.2);
+            color: #e17055;
+        }
+        
+        .badge-danger {
+            background-color: rgba(214, 48, 49, 0.2);
+            color: var(--danger);
+        }
+        
+        .visual-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .discount-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0;
+            transition: width 1s ease-in-out;
+        }
+        
+        .comparison {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .savings {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .savings.positive {
+            color: var(--success);
+        }
+        
+        .savings.negative {
+            color: var(--danger);
+        }
+        
+        /* Floating Calculator Icon */
+        .floating-icon {
+            position: absolute;
+            font-size: 40px;
+            color: var(--primary);
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        /* New Features Section */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .feature-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .feature-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        /* Price History */
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        /* Responsive */
+        @media (max-width: 576px) {
+            .card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .features {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Calculator Icons -->
+    <div class="floating-icon" style="top: 10%; left: 5%;"><i class="fas fa-calculator"></i></div>
+    <div class="floating-icon" style="top: 70%; left: 80%; animation-delay: 1s;"><i class="fas fa-percentage"></i></div>
+    <div class="floating-icon" style="top: 30%; left: 85%; animation-delay: 2s;"><i class="fas fa-tag"></i></div>
+    <div class="floating-icon" style="top: 80%; left: 15%; animation-delay: 3s;"><i class="fas fa-money-bill-wave"></i></div>
+    
+    <div class="container">
+        <div class="card">
+            <h1><i class="fas fa-calculator"></i> Ultimate Discount Calculator</h1>
+            
+            <div class="input-group">
+                <label for="originalPrice">Original Price (MRP)</label>
+                <input type="number" id="originalPrice" placeholder="Enter original price">
+                <span class="currency">₹</span>
+            </div>
+            
+            <div class="input-group">
+                <label for="discountedPrice">Discounted Price</label>
+                <input type="number" id="discountedPrice" placeholder="Enter discounted price">
+                <span class="currency">₹</span>
+            </div>
+            
+            <button id="calculateBtn">Calculate Discount</button>
+            
+            <div class="features">
+                <div class="feature-btn" onclick="calculateMultipleItems()">
+                    <i class="fas fa-boxes"></i> Multiple Items
+                </div>
+                <div class="feature-btn" onclick="showPriceHistory()">
+                    <i class="fas fa-history"></i> History
+                </div>
+                <div class="feature-btn" onclick="calculateReverseDiscount()">
+                    <i class="fas fa-undo"></i> Reverse Calc
+                </div>
+                <div class="feature-btn" onclick="shareResults()">
+                    <i class="fas fa-share-alt"></i> Share
+                </div>
+            </div>
+            
+            <div class="result-container" id="resultContainer">
+                <div class="result-item">
+                    <span class="result-label">Original Price:</span>
+                    <span class="result-value" id="resultOriginal">₹0.00</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Discounted Price:</span>
+                    <span class="result-value" id="resultDiscounted">₹0.00</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">You Save:</span>
+                    <span class="result-value" id="resultSavings">₹0.00</span>
+                </div>
+                
+                <div class="visual-bar">
+                    <div class="discount-fill" id="discountBar"></div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Discount Percentage:</span>
+                    <span class="result-value" id="resultPercentage">0%</span>
+                </div>
+                
+                <div id="discountBadge" class="discount-badge"></div>
+                
+                <div class="comparison">
+                    <div id="comparisonText">Compared to standard 20% discount:</div>
+                    <div class="savings" id="savingsComparison"></div>
+                </div>
+                
+                <div id="priceHistory" style="display: none; margin-top: 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;"><i class="fas fa-history"></i> Recent Calculations</h3>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store calculation history
+        let calculationHistory = [];
+        
+        document.getElementById('calculateBtn').addEventListener('click', calculateDiscount);
+        
+        function calculateDiscount() {
+            // Get input values
+            const original = parseFloat(document.getElementById('originalPrice').value);
+            const discounted = parseFloat(document.getElementById('discountedPrice').value);
+            const resultContainer = document.getElementById('resultContainer');
+            
+            // Validate inputs
+            if (isNaN(original)) {
+                showError("Please enter a valid original price");
+                return;
+            }
+            
+            if (isNaN(discounted)) {
+                showError("Please enter a valid discounted price");
+                return;
+            }
+            
+            if (original <= 0) {
+                showError("Original price must be greater than 0");
+                return;
+            }
+            
+            if (discounted < 0) {
+                showError("Discounted price cannot be negative");
+                return;
+            }
+            
+            if (discounted > original) {
+                showError("Discounted price cannot be higher than original price");
+                return;
+            }
+            
+            // Calculate discount
+            const discountAmount = original - discounted;
+            const discountPercent = (discountAmount / original) * 100;
+            const roundedPercent = Math.round(discountPercent * 100) / 100;
+            
+            // Calculate comparison to 20% discount
+            const standardDiscount = original * 0.2;
+            const standardPrice = original - standardDiscount;
+            const comparison = standardPrice - discounted;
+            
+            // Update results
+            document.getElementById('resultOriginal').textContent = `₹${original.toFixed(2)}`;
+            document.getElementById('resultDiscounted').textContent = `₹${discounted.toFixed(2)}`;
+            document.getElementById('resultSavings').textContent = `₹${discountAmount.toFixed(2)}`;
+            document.getElementById('resultPercentage').textContent = `${roundedPercent}%`;
+            
+            // Update visual bar
+            const discountBar = document.getElementById('discountBar');
+            discountBar.style.width = `${Math.min(discountPercent, 100)}%`;
+            
+            // Update comparison
+            const savingsComparison = document.getElementById('savingsComparison');
+            if (comparison > 0) {
+                savingsComparison.textContent = `You're saving ₹${comparison.toFixed(2)} more than standard discount`;
+                savingsComparison.className = 'savings positive';
+            } else if (comparison < 0) {
+                savingsComparison.textContent = `You're paying ₹${Math.abs(comparison).toFixed(2)} more than standard discount`;
+                savingsComparison.className = 'savings negative';
+            } else {
+                savingsComparison.textContent = 'This matches the standard 20% discount';
+                savingsComparison.className = 'savings';
+            }
+            
+            // Update badge
+            const discountBadge = document.getElementById('discountBadge');
+            discountBadge.innerHTML = '';
+            
+            if (discountPercent > 20) {
+                const above20 = discountPercent - 20;
+                discountBadge.textContent = `🔥 Great deal! ${above20.toFixed(2)}% above standard`;
+                discountBadge.className = 'discount-badge badge-success';
+            } else if (discountPercent === 20) {
+                discountBadge.textContent = '✅ Standard 20% discount';
+                discountBadge.className = 'discount-badge badge-warning';
+            } else {
+                discountBadge.textContent = `⚠️ Below standard (${(20 - discountPercent).toFixed(2)}% less)`;
+                discountBadge.className = 'discount-badge badge-danger';
+            }
+            
+            // Add to history
+            addToHistory(original, discounted, discountPercent);
+            
+            // Show results
+            resultContainer.classList.add('show');
+        }
+        
+        function addToHistory(original, discounted, discountPercent) {
+            const historyItem = {
+                original,
+                discounted,
+                discountPercent,
+                date: new Date()
+            };
+            
+            calculationHistory.unshift(historyItem);
+            if (calculationHistory.length > 5) {
+                calculationHistory.pop();
+            }
+            
+            updateHistoryDisplay();
+        }
+        
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            
+            calculationHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <span>₹${item.original.toFixed(2)} → ₹${item.discounted.toFixed(2)}</span>
+                    <span style="color: ${item.discountPercent >= 20 ? 'var(--success)' : 'var(--danger)'}">
+                        ${item.discountPercent.toFixed(2)}%
+                    </span>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+        
+        function showPriceHistory() {
+            const priceHistory = document.getElementById('priceHistory');
+            priceHistory.style.display = priceHistory.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function calculateMultipleItems() {
+            alert("Feature coming soon! This will allow calculating discounts for multiple items at once.");
+        }
+        
+        function calculateReverseDiscount() {
+            alert("Feature coming soon! This will calculate the original price from a discounted price and percentage.");
+        }
+        
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Discount Calculation',
+                    text: `I saved ${document.getElementById('resultSavings').textContent} (${document.getElementById('resultPercentage').textContent} discount)!`,
+                    url: window.location.href
+                }).catch(err => {
+                    console.log('Error sharing:', err);
+                });
+            } else {
+                alert("Web Share API not supported in your browser. Copy this:\n\n" +
+                    `Original: ${document.getElementById('resultOriginal').textContent}\n` +
+                    `Discounted: ${document.getElementById('resultDiscounted').textContent}\n` +
+                    `Savings: ${document.getElementById('resultSavings').textContent}\n` +
+                    `Discount: ${document.getElementById('resultPercentage').textContent}`);
+            }
+        }
+        
+        function showError(message) {
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = `<div style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--danger')}; text-align: center; font-weight: 500;">${message}</div>`;
+            resultContainer.classList.add('show');
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                resultContainer.classList.remove('show');
+                setTimeout(() => {
+                    resultContainer.innerHTML = `
+                        <div class="result-item">
+                            <span class="result-label">Original Price:</span>
+                            <span class="result-value" id="resultOriginal">₹0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Discounted Price:</span>
+                            <span class="result-value" id="resultDiscounted">₹0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">You Save:</span>
+                            <span class="result-value" id="resultSavings">₹0.00</span>
+                        </div>
+                        
+                        <div class="visual-bar">
+                            <div class="discount-fill" id="discountBar"></div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <span class="result-label">Discount Percentage:</span>
+                            <span class="result-value" id="resultPercentage">0%</span>
+                        </div>
+                        
+                        <div id="discountBadge" class="discount-badge"></div>
+                        
+                        <div class="comparison">
+                            <div id="comparisonText">Compared to standard 20% discount:</div>
+                            <div class="savings" id="savingsComparison"></div>
+                        </div>
+                        
+                        <div id="priceHistory" style="display: none; margin-top: 20px;">
+                            <h3 style="font-size: 16px; margin-bottom: 10px;"><i class="fas fa-history"></i> Recent Calculations</h3>
+                            <div id="historyList"></div>
+                        </div>
+                    `;
+                }, 500);
+            }, 3000);
+        }
+        
+        // Add event listeners for Enter key
+        document.getElementById('originalPrice').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateDiscount();
+            }
+        });
+        
+        document.getElementById('discountedPrice').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateDiscount();
+            }
+        });
+    </script>
+    
+    <footer style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #2d3748; /* Professional dark gray */
+        color: #e2e8f0;
+        padding: 14px 0;
+        text-align: center;
+        font-family: 'Segoe UI', sans-serif;
+        border-top: 1px solid #4a5568;
+        z-index: 1000;
+    ">
+        <div style="
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        ">
+            <div style="font-size: 14px;">
+                <i class="fas fa-calculator"></i> Discount Calculator Pro
+            </div>
+            
+            <div style="display: flex; gap: 20px;">
+                <a href="about.html" style="color: #e2e8f0; text-decoration: none;">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <span style="color: #718096;">•</span>
+                <span style="font-size: 13px;">
+                    <i class="fas fa-user-graduate"></i> Shayan Akhtar (LPU)
+                </span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

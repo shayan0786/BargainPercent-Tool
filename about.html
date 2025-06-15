@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Discount Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;  /* Professional blue */
+            --secondary: #3a0ca3;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f5f7ff;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .about-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            margin-top: 0;
+            color: var(--secondary);
+        }
+        
+        .developer-card {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .developer-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--light);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: white;
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        /* Footer styles */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .developer-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="feature-icon">
+                <i class="fas fa-percentage" style="font-size: 3rem; color: var(--primary);"></i>
+            </div>
+            <h1>About Discount Calculator</h1>
+            <p class="subtitle">A professional tool designed to help small businesses calculate and display discounts with transparency and ease</p>
+        </header>
+        
+        <div class="about-card">
+            <h2 style="margin-top: 0; color: var(--primary);">Why This Tool Exists</h2>
+            <p>During my interactions with local shopkeepers, I noticed three common problems:</p>
+            <ul style="padding-left: 20px;">
+                <li>Shopkeepers struggle to quickly calculate discount percentages during sales</li>
+                <li>Customers often don't understand how much they're actually saving</li>
+                <li>Rounded pricing (like ₹665 → ₹600) makes percentage calculations confusing</li>
+            </ul>
+            <p>This tool solves all these problems with a simple, intuitive interface that shows customers exactly what discount they're getting.</p>
+        </div>
+        
+        <h2 style="text-align: center; color: var(--primary); margin: 50px 0 30px;">Key Features</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Instant Calculations</h3>
+                <p>Get accurate discount percentages in real-time as you type, eliminating manual calculation errors.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h3>Customer Display</h3>
+                <p>Professional display shows customers exactly what they saved in clear, simple terms.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <h3>Multiple Items</h3>
+                <p>Calculate discounts for entire purchases with multiple items at different prices.</p>
+            </div>
+        </div>
+        
+        <h2 style="text-align: center; color: var(--primary); margin: 50px 0 30px;">About the Developer</h2>
+        <div class="developer-card">
+            <img src="https://via.placeholder.com/150" alt="Shayan Akhtar" class="developer-photo"> <!-- Replace with your photo -->
+            <div>
+                <h3 style="margin-top: 0; color: var(--primary);">Shayan Akhtar</h3>
+                <p><i class="fas fa-university" style="color: var(--primary);"></i> Computer Science Student at Lovely Professional University</p>
+                <p><i class="fas fa-laptop-code" style="color: var(--primary);"></i> Data Science Enthusiast</p>
+                <p><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Punjab, India</p>
+                
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Calculator
+            </a>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 Discount Calculator Pro | Created with <i class="fas fa-heart" style="color: #ff5252;"></i> by Shayan Akhtar</p>
+    </footer>
+</body>
+</html>
